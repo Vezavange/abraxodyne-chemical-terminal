@@ -34,7 +34,7 @@ function onNewRecipeClick(e) {
             <label id="name">Название >></label><input type="text" id="name-input" /><br />
             <label id="text">Текст >></label><input type="text" id="text-input" /><br />
             <br class="temporaly-menu" />
-            <a id="save-recipe"><p>[1] Записать</p></a>
+            <a class="temporaly-menu" id="save-recipe"><p>[1] Записать</p></a>
         </form>
         <a class="temporaly-menu" id="clear-form"><p>[2] Очистить форму</p></a>
         <a class="temporaly-menu" id="back-to-main"><p>[3] Назад</p></a>
@@ -340,9 +340,20 @@ function restoreFromBackup() {
             try {
                 const backupData = JSON.parse(e.target.result);
                 setStoredData(backupData);
-                alert("Данные восстановлены успешно.");
+                document.querySelectorAll('.temporaly-menu').forEach(el => el.remove());
+                const content = document.querySelector('.content');
+                content.insertAdjacentHTML('beforeend', `
+                    <p class="temporaly-menu">Данные успешно востановленны</p>
+                    <a class="temporaly-menu" id="back-to-main"><p>[1] Назад</p></a>
+                `);
             } catch (error) {
-                alert("Ошибка восстановления данных: " + error.message);
+                document.querySelectorAll('.temporaly-menu').forEach(el => el.remove());
+                const content = document.querySelector('.content');
+                content.insertAdjacentHTML('beforeend', `
+                    <p class="temporaly-menu">Ошибка востановления данных</p>
+                    <p class="temporaly-menu">Обратитесь к СИСАДМ</p>
+                    <a class="temporaly-menu" id="back-to-main"><p>[1] Назад</p></a>
+                `);
             }
         };
         reader.readAsText(file);
