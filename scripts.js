@@ -71,10 +71,10 @@ function onNewRecipeClick(e) {
             return;
         }
         let recipes = getStoredData();
+        if (recipes.isArray()) {
         const existingIds = recipes.map(item => item.id);
-
         if (!existingIds.includes(id)) {
-            recipes.push({ id: id, name: name, text: text });
+                recipes.push({ id: id, name: name, text: text });
             setStoredData(recipes);
             document.querySelectorAll('.temporaly-menu').forEach(el => el.remove());
             content.insertAdjacentHTML('beforeend', `
@@ -107,7 +107,24 @@ function onNewRecipeClick(e) {
             });
             return;
         }
-    });
+    } else { 
+        recipes = [{ id: id, name: name, text: text }]
+        setStoredData(recipes);
+            document.querySelectorAll('.temporaly-menu').forEach(el => el.remove());
+            content.insertAdjacentHTML('beforeend', `
+                <p class="temporaly-menu">
+                    Запись... готово <br/>
+                    Файл успешно добавлен
+                </p>
+                <br class="temporaly-menu" />
+                <a class="temporaly-menu" id="back-to-new-recipe"><p>[1] Назад</p></a>
+            `);
+            const backToNewRecipeLink = document.querySelector('#back-to-new-recipe');
+            backToNewRecipeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                onNewRecipeClick(e);
+            });
+    }});
 }
 
 function editRecipe(e, recipeId) {
